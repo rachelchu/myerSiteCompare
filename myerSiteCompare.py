@@ -10,6 +10,8 @@ Email: everright.chen@gmail.com
 Website: http://everright.cn
 Github: https://github.com/everright
 Version: 1.0 Beta 2
+
+Version: 2.0 (by rachel
 """
 
 
@@ -52,6 +54,8 @@ class Url(object):
         
 def generateUrl(siteurl,security=""):
     cur_url = Url(siteurl)
+    if security == None :
+        return siteurl
     if security.strip()!="" :
         cur_url.netloc = security + "@" + cur_url.netloc
         return cur_url.__unicode__()
