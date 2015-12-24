@@ -5,13 +5,7 @@
 Use selenium Firefox webdirver to capture screenshots of site pages.
 It will be generate compare reports with friendly html format.
 
-Author: everright.chen
-Email: everright.chen@gmail.com
-Website: http://everright.cn
-Github: https://github.com/everright
-Version: 1.0 Beta 2
-
-Version: 2.0 (by rachel
+Version: 2.0 (by rachel)
 """
 
 
@@ -54,7 +48,7 @@ class Url(object):
         
 def generateUrl(siteurl,security=""):
     cur_url = Url(siteurl)
-    if security == None :
+    if security is None :
         return siteurl
     if security.strip()!="" :
         cur_url.netloc = security + "@" + cur_url.netloc
