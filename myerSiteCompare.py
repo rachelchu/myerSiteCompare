@@ -325,19 +325,23 @@ class siteCompare(object):
         url = Url(link)
         url_path = url.path
         if (self._baseDomain == url.netloc):
-            url.fragment = ''
+            #support hashtag links
+            #url.fragment = ''
             path = url.getPath()
             #logging.info("self._site1:[%s]" % self._site1)
             #logging.info("self._site2:[%s]" % self._site2)
             #logging.info("link:[%s]" % link)
             #logging.info("1:[%s]" % link.find(self._site1,0))
-            #logging.info("2:[%s]" % link.find(self._site2,0))                 
+            #logging.info("2:[%s]" % link.find(self._site2,0))   
+            
+            #ignore links(Links have been counted already.)
             if path in self._ignoreLinks:
                 logging.info('Ignore link [%s].' % link)
-            elif (((url_path.find(site1_path,0)) == 0) or ((url_path.find(site2_path,0)) == 0)) == False :                
-            #elif ((link.find(self._site1,0)) == -1) and ((link.find(self._site2,0)) == -1) :
+            #external links
+            elif (((url_path.find(site1_path,0)) == 0) or ((url_path.find(site2_path,0)) == 0)) == False :                           
                 logging.info('Ignore_subpath link [%s].' % link)
             else:
+                #external params
                 if self._ignoreParams :
                     cur_ignore = 0
                     for curpara in self._ignoreParams:
@@ -348,12 +352,16 @@ class siteCompare(object):
                     else:
                         link = url.build()
                         if not self._siteLinks.has_key(link):
+                        #Test hashtag    
+                        #if not self._siteLinks.has_key(link) and ("#" in link or link.endswith('en') ):
                             self._siteLinks[link] = ''
                             self._scrapeQueue.append(link)
                             logging.info('Append new link [%s].' % link)
                 else :     
                     link = url.build()
                     if not self._siteLinks.has_key(link):
+                    #Test hashtag 
+                    #if not self._siteLinks.has_key(link) and ("#" in link or link.endswith('en') ):
                         self._siteLinks[link] = ''
                         self._scrapeQueue.append(link)
                         logging.info('Append new link [%s].' % link)
@@ -362,7 +370,7 @@ class siteCompare(object):
         elements = self.driver.find_elements_by_xpath("//a|//area|//iframe|//frame")
         if elements:
             for el in elements:
-                key = 'href'
+                key = 'href'               
                 if ('frame' == el.tag_name or 'iframe' == el.tag_name):
                     key = 'src'
                 link = el.get_attribute(key)
@@ -377,6 +385,8 @@ class siteCompare(object):
         print "Processing %s" % (url)
         try:
             self.driver.get(url)
+            self.driver.refresh()
+            self.driver.execute_script("window.scrollTo(0,0);")
             self.prepareLinks()
         except TimeoutException, e:
             print 'Link [%s] connection time out.' % url
