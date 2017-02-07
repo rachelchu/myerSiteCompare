@@ -325,8 +325,8 @@ class siteCompare(object):
         url = Url(link)
         url_path = url.path
         if (self._baseDomain == url.netloc):
-            #support hashtag links
-            #url.fragment = ''
+            #If you want to support hashtag links, you can delete "url.fragment = ''"
+            url.fragment = ''
             path = url.getPath()
             #logging.info("self._site1:[%s]" % self._site1)
             #logging.info("self._site2:[%s]" % self._site2)
